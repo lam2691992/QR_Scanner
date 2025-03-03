@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../local_auth/local_auth.dart';
+final LocalAuthentication auth = LocalAuthentication();
 
 class SettingsScreen extends StatefulWidget {
   final Function(ThemeMode) onThemeChanged;
@@ -13,6 +14,62 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool isSwitchOn = false;
+  bool hasBiometrics = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkBiometrics();
+  }
+
+  // Kiểm tra thiết bị có hỗ trợ biometrics không
+  Future<void> _checkBiometrics() async {
+    try {
+      final bool canCheck = await auth.canCheckBiometrics;
+      final List<BiometricType> availableBiometrics =
+          await auth.getAvailableBiometrics();
+
+      if (canCheck &&
+          (availableBiometrics.contains(BiometricType.face) ||
+              availableBiometrics.contains(BiometricType.fingerprint))) {
+        setState(() {
+          hasBiometrics = true;
+        });
+      } else {
+        setState(() {
+          hasBiometrics = false;
+        });
+      }
+    } catch (e) {
+      print("Error checking biometrics: $e");
+      setState(() {
+        hasBiometrics = false;
+      });
+    }
+  }
+
+  // Xác thực biometrics
+  Future<bool> authenticateWithBiometrics() async {
+    bool didAuthenticate = false;
+    try {
+      final bool canCheckBiometrics = await auth.canCheckBiometrics;
+      if (!canCheckBiometrics) return false;
+      final List<BiometricType> availableBiometrics =
+          await auth.getAvailableBiometrics();
+      if (availableBiometrics.contains(BiometricType.face) ||
+          availableBiometrics.contains(BiometricType.fingerprint)) {
+        didAuthenticate = await auth.authenticate(
+          localizedReason: 'Please authenticate to enable Face ID login',
+          options: const AuthenticationOptions(
+            biometricOnly: true,
+          ),
+        );
+      }
+    } catch (e) {
+      print("Error using biometrics: $e");
+    }
+    return didAuthenticate;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -162,69 +219,70 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Theme.of(context).cardColor,
-                  ),
-                  child: Row(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(left: 18.0, right: 18),
-                        child: Icon(
-                          Icons.qr_code_rounded,
-                          color: Colors.orange,
-                          size: 24.0,
+                if (hasBiometrics)
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Theme.of(context).cardColor,
+                    ),
+                    child: Row(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 18.0, right: 18),
+                          child: Icon(
+                            Icons.qr_code_rounded,
+                            color: Colors.orange,
+                            size: 24.0,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Touch/Face ID',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5),
-                        child: Transform.scale(
-                          scale: 0.8,
-                          child: Switch(
-                            value: isSwitchOn,
-                            onChanged: (value) async {
-                              if (value) {
-                                // Người dùng vừa bật switch => Yêu cầu xác thực
-                                bool success =
-                                    await authenticateWithBiometrics();
-                                if (success) {
-                                  setState(() {
-                                    isSwitchOn = true; // Bật thành công
-                                  });
+                        Text(
+                          'Touch/Face ID',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        const Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 5),
+                          child: Transform.scale(
+                            scale: 0.8,
+                            child: Switch(
+                              value: isSwitchOn,
+                              onChanged: (value) async {
+                                if (value) {
+                                  // Người dùng bật switch => yêu cầu xác thực
+                                  bool success =
+                                      await authenticateWithBiometrics();
+                                  if (success) {
+                                    setState(() {
+                                      isSwitchOn = true;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      isSwitchOn = false;
+                                    });
+                                    if (!context.mounted) return;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            "Authentication failed or not available"),
+                                      ),
+                                    );
+                                  }
                                 } else {
-                                  // Không xác thực được => không bật switch
+                                  // Người dùng tắt switch
                                   setState(() {
                                     isSwitchOn = false;
                                   });
-                                  if (!context.mounted) return;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            "Authentication failed or not available")),
-                                  );
                                 }
-                              } else {
-                                // Người dùng tắt switch => tắt Face ID
-                                setState(() {
-                                  isSwitchOn = false;
-                                });
-                              }
-                            },
-                            activeColor: Colors.orange,
-                            inactiveTrackColor: Colors.grey,
+                              },
+                              activeColor: Colors.orange,
+                              inactiveTrackColor: Colors.grey,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
                 const SizedBox(height: 16),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
