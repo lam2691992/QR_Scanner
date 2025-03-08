@@ -1,7 +1,7 @@
-// text_fỏm_field
+
 import 'package:flutter/material.dart';
 
-/// Hàm tạo widget TextFormField
+/// Hàm tạo TextFormField
 Widget buildTextFieldWithCounter({
   required BuildContext context,
   required TextEditingController controller,

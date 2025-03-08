@@ -71,7 +71,7 @@ class _WifiScreenState extends State<WifiScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(95),
+        preferredSize: const Size.fromHeight(130),
         child: AppBar(
           automaticallyImplyLeading: false,
           flexibleSpace: Padding(
@@ -242,7 +242,6 @@ class _WifiScreenState extends State<WifiScreen> {
                 ),
               ),
             ),
-            // Nút "Generate" luôn ở cuối màn hình
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: SizedBox(

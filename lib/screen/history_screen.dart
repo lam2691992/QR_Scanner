@@ -37,7 +37,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
         centerTitle: true,
       ),
       body: scanHistory.isEmpty
-          ? const Center(child: Text("No data."))
+          ? Center(
+              child: Text("No data.",
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith()))
           : ListView.builder(
               itemCount: scanHistory.length,
               itemBuilder: (context, index) {

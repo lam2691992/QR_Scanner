@@ -69,7 +69,7 @@ class _MusicScreenState extends State<MusicScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(95), // Tăng chiều cao AppBar
+        preferredSize: const Size.fromHeight(130), // Tăng chiều cao AppBar
         child: AppBar(
           automaticallyImplyLeading: false,
           flexibleSpace: Padding(

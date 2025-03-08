@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 final LocalAuthentication auth = LocalAuthentication();
 
@@ -75,7 +76,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(95),
+        preferredSize: const Size.fromHeight(130),
         child: AppBar(
           automaticallyImplyLeading: false,
           flexibleSpace: Padding(
@@ -314,8 +315,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               size: 20.0,
                             ),
                             onPressed: () async {
-                              final Uri url =
-                                  Uri.parse('https://www.google.com');
+                              final Uri url = Uri.parse(
+                                  'https://www.hhhtechnologies.com/terms-and-conditions');
                               if (await canLaunchUrl(url)) {
                                 await launchUrl(url);
                               } else {
@@ -357,8 +358,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               color: Theme.of(context).iconTheme.color,
                               size: 20.0,
                             ),
-                            onPressed: () {
-                              // Thực hiện hành động khi nhấn vào mũi tên
+                            onPressed: () async {
+                              final Uri url = Uri.parse(
+                                  'https://www.hhhtechnologies.com/privacy-policy');
+                              if (await canLaunchUrl(url)) {
+                                await launchUrl(url);
+                              } else {
+                                if (!context.mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Could not launch $url'),
+                                    duration: const Duration(seconds: 2),
+                                  ),
+                                );
+                              }
                             },
                           ),
                         ],
@@ -396,8 +409,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               color: Theme.of(context).iconTheme.color,
                               size: 20.0,
                             ),
-                            onPressed: () {
-                              // Thực hiện hành động khi nhấn vào mũi tên
+                            onPressed: () async {
+                              // Tạo Uri mailto
+                              final Uri mailUri = Uri(
+                                scheme: 'mailto',
+                                path: 'support@netron.solutions',
+                                query: _encodeQueryParameters(<String, String>{
+                                  'subject': 'Netron | QR Code - Support',
+                                  'cc': 'lam269.lnv@gmail.com',
+                                }),
+                              );
+                              // Kiểm tra có mở được mail app không
+                              if (await canLaunchUrl(mailUri)) {
+                                await launchUrl(mailUri);
+                              } else {
+                                // Xử lý trường hợp không mở được
+                                if (!context.mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Could not open mail app.'),
+                                  ),
+                                );
+                              }
                             },
                           ),
                         ],
@@ -430,7 +463,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               size: 20.0,
                             ),
                             onPressed: () {
-                              // Thực hiện hành động khi nhấn vào mũi tên
+                              const String appLink = 'https://app-link.com';
+                              Share.share(appLink,
+                                  subject: 'Check out this app!');
                             },
                           ),
                         ],
@@ -445,4 +480,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
     );
   }
+}
+
+String _encodeQueryParameters(Map<String, String> params) {
+  return params.entries
+      .map((MapEntry<String, String> e) =>
+          '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+      .join('&');
 }

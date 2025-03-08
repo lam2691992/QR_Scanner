@@ -70,7 +70,7 @@ class _EmailScreenState extends State<EmailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(95),
+        preferredSize: const Size.fromHeight(130),
         child: AppBar(
           automaticallyImplyLeading: false,
           flexibleSpace: Padding(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:barcode/barcode.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:qr_scanner/utils/icons/copy_icon_button.dart';
 
 import '../../utils/copy_text.dart';
 import '../../utils/get_formatted_data.dart';
@@ -52,134 +53,121 @@ class GeneratedBarcodeScreen extends StatelessWidget {
       height: 150,
       drawText: false,
     );
-
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(95), // Tăng chiều cao AppBar
+        preferredSize: const Size.fromHeight(130),
         child: AppBar(
-          backgroundColor: Colors.black,
+          backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
           automaticallyImplyLeading: false,
-          flexibleSpace: Padding(
-            padding: const EdgeInsets.only(top: 30),
-            child: Stack(
-              children: [
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon:
-                            const Icon(Icons.arrow_back, color: Colors.orange),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text(
-                          "Barcode",
-                          style: TextStyle(color: Colors.orange, fontSize: 20),
+          flexibleSpace: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back,
+                              color: Colors.orange),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                         ),
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        onPressed: () => shareQrCode(context, _globalKey),
-                        icon: const Icon(Icons.ios_share, color: Colors.orange),
-                      ),
-                      IconButton(
-                        onPressed: () async {
-                          await saveQrCode(_globalKey, context);
-                        },
-                        icon: const Icon(Icons.download, color: Colors.orange),
-                      ),
-                    ],
-                  ),
-                ),
-                const Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 40, left: 30),
-                    child: Text(
-                      "Barcode",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                        color: Colors.white,
-                      ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            "Barcode",
+                            style:
+                                TextStyle(color: Colors.orange, fontSize: 20),
+                          ),
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          onPressed: () => shareQrCode(context, _globalKey),
+                          icon:
+                              const Icon(Icons.ios_share, color: Colors.orange),
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            await saveQrCode(_globalKey, context);
+                          },
+                          icon:
+                              const Icon(Icons.download, color: Colors.orange),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ],
+                  Positioned(
+                    bottom: 20,
+                    left: 10,
+                    child: Text(
+                      "Barcode",
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30,
+                          ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
-      backgroundColor: Colors.black,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            RepaintBoundary(
-              key: _globalKey,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16.0),
-                  color: Colors.white,
-                ),
-                child: SvgPicture.string(
-                  svg,
-                  fit: BoxFit.scaleDown,
-                  placeholderBuilder: (context) =>
-                      const CircularProgressIndicator(),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              RepaintBoundary(
+                key: _globalKey,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16.0),
+                    color: Colors.white,
+                  ),
+                  child: SvgPicture.string(
+                    svg,
+                    fit: BoxFit.scaleDown,
+                    placeholderBuilder: (context) =>
+                        const CircularProgressIndicator(),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    getFormattedData(data), // Hiển thị nội dung người dùng nhập
-                    style: const TextStyle(
-                      fontSize: 17,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 20),
-                GestureDetector(
-                  onTap: () {
-                    copyText(context,
-                        data); // Gọi hàm copyText để copy 'data' vào clipboard
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 16),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                     decoration: BoxDecoration(
                       color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(
-                      Icons.copy,
-                      color: Colors.orange,
+                    child: Text(
+                      getFormattedData(data), // Hiển thị nội dung người dùng nhập
+                      style: const TextStyle(
+                        fontSize: 17,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  const SizedBox(width: 20),
+                  CopyIconButton(data: data),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

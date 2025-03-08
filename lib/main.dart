@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screen/home_screen.dart';
+import 'utils/custom_colors.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,9 +41,11 @@ class _MyAppState extends State<MyApp> {
           color: Colors.black, // Màu nền icon
         ),
         textTheme: const TextTheme(
-          bodyLarge:
-              TextStyle(color: Colors.black, fontSize: 20), // Màu nền Text
+          bodyLarge: TextStyle(color: Colors.black, fontSize: 20),        
         ),
+        extensions: <ThemeExtension<dynamic>>[
+      CustomColors(qrBackground: Colors.grey[300]),
+    ],
       ),
       // Định nghĩa theme cho chế độ dark
       darkTheme: ThemeData(
@@ -61,8 +64,10 @@ class _MyAppState extends State<MyApp> {
           bodyLarge:
               TextStyle(color: Colors.white, fontSize: 20), // Màu nền Text
         ),
+        extensions:const <ThemeExtension<dynamic>>[
+      CustomColors(qrBackground: Colors.white),
+    ],
       ),
-
       // Truyền callback _changeTheme xuống HomeScreen
       home: HomeScreen(onThemeChanged: _changeTheme),
     );
