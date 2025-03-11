@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:qr_scanner/database/database_helper.dart';
 import 'package:qr_scanner/screen/qr_scanner_screen.dart';
 import 'package:qr_scanner/screen/setting_screen.dart';
-import '../utils/custom_page_route.dart';
-import '../utils/url_launcher.dart';
+import '../widgets/custom_page_route.dart';
+import '../widgets/url_launcher.dart';
 import 'menu_code_generator.dart';
 import 'history_screen.dart';
 

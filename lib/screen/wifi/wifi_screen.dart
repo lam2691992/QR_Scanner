@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'generated_wifi_screen.dart';
-import '../../utils/sliding_selector_security_wifi.dart';
+import '../../widgets/sliding_selector_security_wifi.dart';
 
 class WifiScreen extends StatefulWidget {
   const WifiScreen({super.key});

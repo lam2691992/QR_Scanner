@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:barcode/barcode.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:qr_scanner/utils/icons/copy_icon_button.dart';
-
-import '../../utils/copy_text.dart';
-import '../../utils/get_formatted_data.dart';
-import '../../utils/save_qr_code.dart';
-import '../../utils/share_qr_code.dart';
+import 'package:qr_scanner/utils/icons/copy_qr_code.dart';
+import '../../widgets/get_formatted_data.dart';
+import '../../widgets/save_qr_code.dart';
+import '../../widgets/share_qr_code.dart';
 
 class GeneratedBarcodeScreen extends StatelessWidget {
   final String data;

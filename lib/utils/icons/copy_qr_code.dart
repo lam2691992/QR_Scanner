@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qr_scanner/utils/copy_text.dart';
+import 'package:qr_scanner/widgets/copy_text.dart';
 
 class CopyIconButton extends StatelessWidget {
   final String data;

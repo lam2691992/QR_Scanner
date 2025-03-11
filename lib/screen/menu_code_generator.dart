@@ -10,7 +10,7 @@ import 'package:qr_scanner/screen/website/web_screen.dart';
 import 'package:qr_scanner/screen/whatsapp/whatsapp_screen.dart';
 import 'package:qr_scanner/screen/wifi/wifi_screen.dart';
 import 'package:qr_scanner/screen/youtube/youtube_screen.dart';
-import '../utils/custom_page_route.dart';
+import '../widgets/custom_page_route.dart';
 import 'app_store/appStore_screen.dart';
 import 'barcode/barcode_screen.dart';
 import 'drive/drive_screen.dart';

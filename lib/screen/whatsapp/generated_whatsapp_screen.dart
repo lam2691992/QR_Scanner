@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:qr_scanner/utils/custom_colors.dart';
-import 'package:qr_scanner/utils/icons/copy_icon_button.dart';
-import '../../utils/get_formatted_data.dart';
-import '../../utils/save_qr_code.dart';
-import '../../utils/share_qr_code.dart';
+import 'package:qr_scanner/widgets/custom_colors.dart';
+import 'package:qr_scanner/utils/icons/copy_qr_code.dart';
+import '../../widgets/get_formatted_data.dart';
+import '../../widgets/save_qr_code.dart';
+import '../../widgets/share_qr_code.dart';
 
 class GeneratedWhatsappScreen extends StatelessWidget {
   final String data;

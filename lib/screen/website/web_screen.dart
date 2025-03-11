@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/text_form_field.dart';
+import '../../widgets/text_form_field.dart';
 import 'generated_web_screen.dart';
 
 class WebScreen extends StatefulWidget {
